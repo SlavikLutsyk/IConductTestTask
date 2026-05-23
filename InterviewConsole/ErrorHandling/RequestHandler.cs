@@ -6,6 +6,7 @@ using EmployeeService.Implementation.Extensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -33,7 +34,7 @@ namespace EmployeeService.Implementation.ErrorHandling
 
             try
             {
-                object obj = await this.Mediator.Send((object)request, HttpContext.Current.Response.ClientDisconnectedToken);
+                object obj = await this.Mediator.Send((object)request, HttpContext.Current?.Response.ClientDisconnectedToken ?? CancellationToken.None);
                 response = this.Mapper.Map<TResponse>(obj);
                 if (response.IsSuccessResponse())
                 {
